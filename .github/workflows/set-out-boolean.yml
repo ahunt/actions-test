@@ -1,0 +1,49 @@
+name: set-out Boolean testing
+
+on:
+  workflow_dispatch:
+
+env:
+  foo: false
+
+jobs:
+  bool-from-env:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ env.foo }}
+    steps:
+    - name: main
+      run: echo "hello"
+  bool-from-set-out:
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.main.outputs.result }}
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+    - name: main
+      id: main
+#      uses: ./boolean-action
+      run: echo '::set-output name=result::false'
+  result-env:
+    runs-on: ubuntu-latest
+    needs: bool-from-env
+    if: needs.bool-from-env.outputs.result
+    steps:
+    - name: main
+      run: printf "result was _%s_\n" ${{ needs.bool-from-env.outputs.result }}
+  result-set-out:
+    runs-on: ubuntu-latest
+    needs: bool-from-set-out
+    if: needs.bool-from-set-out.outputs.result
+    steps:
+    - name: main
+      run: printf "result was _%s_\n" ${{ needs.bool-from-set-out.outputs.result }}
+  result-set-out-NOT:
+    runs-on: ubuntu-latest
+    needs: bool-from-set-out
+    if: ${{ !needs.bool-from-set-out.outputs.result }}
+    steps:
+    - name: main
+      run: printf "result was _%s_\n" ${{ needs.bool-from-set-out.outputs.result }}
+
