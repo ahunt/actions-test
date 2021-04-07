@@ -23,7 +23,6 @@ jobs:
       uses: actions/checkout@v2
     - name: main
       id: main
-#      uses: ./boolean-action
       run: echo '::set-output name=result::false'
   result-env:
     runs-on: ubuntu-latest
