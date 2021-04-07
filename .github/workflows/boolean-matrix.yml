@@ -16,4 +16,4 @@ jobs:
     steps:
     - name: Run a one-line script ${{ matrix.config.name }}
       run: echo Hello, world!
-      if: matrix.config.run-it
+      if: ${{ matrix.config.run-it }}
