@@ -1,0 +1,19 @@
+name: Boolean Matrix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+        - {run-it: true, name: foo}
+        - {run-it: false, name: bar}
+
+    steps:
+    - name: Run a one-line script ${{ matrix.config.name }}
+      run: echo Hello, world!
+      if: matrix.config.run-it
